@@ -17,18 +17,16 @@ export const authMiddleware = async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     const user = await prisma.user.findUnique({
-      where: { id: decoded.sub },
+      where: { id: decoded.id },
       select: { id: true, email: true },
     });
 
     if (!user) {
-      return res
-        .status(401)
-        .json({ error: "Unauthorized. User does not exist." });
+      return res.status(401).json({ error: "Unauthorized." });
     }
 
     req.user = user;
-    next();
+    return next();
   } catch (err) {
     console.error("Error encountered:", err);
     return res.status(401).json({ error: "Invalid or expired token." });
