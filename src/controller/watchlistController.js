@@ -108,7 +108,7 @@ export const removeFromWatchlist = async (req, res) => {
     });
   }
 
-  await prisma.watchlistItem.update({
+  await prisma.watchlistItem.delete({
     where: { id: req.params.id },
   });
 
